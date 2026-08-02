@@ -14,6 +14,9 @@ heritage_twin_pipeline_colab.ipynb   Pipeline chính: video -> COLMAP -> train 3
 heritage_twin_video_to_colmap_colab.ipynb        Notebook cũ (giữ lại để tham khảo, đã gộp vào file trên)
 heritage_twin_train_from_colmap_zip_colab (1).ipynb  Notebook cũ (giữ lại để tham khảo, đã gộp vào file trên)
 
+heritage_twin_crack_detection_colab.ipynb   Train YOLOv8-seg phát hiện vết nứt (độc lập với pipeline 3D)
+                                       (dataset DeepCrack -> convert nhãn -> train -> demo trên ảnh thật)
+
 docs/                                  Website tự host, không cần backend/database
                                        (đặt tên "docs" để GitHub Pages deploy được trực tiếp từ nhánh main)
   index.html                          Trang giới thiệu dự án (landing page)
