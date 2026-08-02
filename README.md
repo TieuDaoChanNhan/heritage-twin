@@ -24,6 +24,11 @@ docs/                                  Website tự host, không cần backend/d
     index.html, main.js               Vendor từ antimatter15/splat (MIT license), WebGL thuần
     convert.py                        Convert .ply -> .splat offline (tuỳ chọn)
     README.md                         Hướng dẫn chạy và nạp model
+  crack/                              Demo phát hiện vết nứt, chạy model ngay trên trình duyệt
+    index.html, main.js               Tiền xử lý ảnh + inference + hậu xử lý (NMS, giải mã mask)
+    ort/                               Vendor từ onnxruntime-web (MIT license), chỉ dùng WASM backend
+    model/best.onnx                   Model đã export - KHÔNG có sẵn, xem docs/crack/README.md để lấy
+    README.md                         Hướng dẫn lấy model + chạy thử
 ```
 
 ## Quy trình dùng thử
@@ -33,6 +38,8 @@ docs/                                  Website tự host, không cần backend/d
 3. Mở `docs/viewer/index.html` (xem `docs/viewer/README.md`), chọn/kéo-thả file `.ply` vào để xem trực
    tiếp trên trình duyệt. Hoặc dùng link GitHub Pages sau khi bật trong Settings -> Pages -> Branch
    `main` / folder `/docs` (trang chủ là `docs/index.html`, nút "Xem demo mô hình 3D" dẫn sang viewer).
+4. Chạy `heritage_twin_crack_detection_colab.ipynb` tới cell export ONNX, tải `best.onnx`, đặt vào
+   `docs/crack/model/best.onnx` (xem `docs/crack/README.md`) để bật demo phát hiện vết nứt trên web.
 
 ## Lưu ý
 

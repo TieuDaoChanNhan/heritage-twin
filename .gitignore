@@ -10,6 +10,10 @@
 *_gaussian_*/
 events.out.tfevents*
 
+# Checkpoint PyTorch thô (.pt) - chỉ cần bản .onnx đã export nằm trong docs/crack/model/ cho web demo
+*.pt
+crack_model_raw/
+
 # Python
 __pycache__/
 *.pyc
