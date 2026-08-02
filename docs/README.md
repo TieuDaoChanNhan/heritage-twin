@@ -7,7 +7,7 @@ Viewer này là bản vendor từ [antimatter15/splat](https://github.com/antima
 ## Chạy thử local
 
 ```bash
-cd viewer
+cd docs
 python -m http.server 8000
 ```
 
@@ -38,5 +38,6 @@ thuộc vào scene demo mạng ngoài.
 
 - Sau khi Colab train xong và tải `point_cloud.ply` về (qua Google Drive theo pipeline trong
   `heritage_twin_pipeline_colab.ipynb`), thử kéo-thả file đó vào viewer này để kiểm tra end-to-end.
-- Khi đã ổn, deploy `index.html` + `main.js` lên 1 static host (GitHub Pages là nhanh nhất, miễn phí) để có
-  link demo cố định cho video/ban giám khảo, kèm sẵn 1-2 file `.splat` convert trước bằng `convert.py`.
+- Đã đặt thư mục này tên `docs/` để bật GitHub Pages trực tiếp: Settings -> Pages -> Branch `main`,
+  folder `/docs` -> Save. Có link demo cố định cho video/ban giám khảo, kèm sẵn 1-2 file `.splat` convert
+  trước bằng `convert.py`.
