@@ -23,8 +23,10 @@ nghiêng/rêu mốc/đa thời điểm vì phức tạp, không cần thiết ch
 - [x] Dựng web viewer 3D tự host (`docs/viewer/`), landing page giới thiệu dự án (`docs/index.html`).
 - [x] Đẩy lên GitHub, bật GitHub Pages: repo `TieuDaoChanNhan/heritage-twin`, live tại
       `https://tieudaochannhan.github.io/heritage-twin/`.
-- [x] Train YOLOv8-seg phát hiện vết nứt: `heritage_twin_crack_detection_colab.ipynb`, đang chạy/đã chạy
-      trên dataset DeepCrack, weight lưu tại `MyDrive/HeritageTwin/crack_detection/runs/crack_yolov8n_seg/weights/best.pt`.
+- [x] Train YOLOv8-seg phát hiện vết nứt xong (150 epoch, dataset DeepCrack), weight tại
+      `MyDrive/HeritageTwin/crack_detection/runs/crack_yolov8n_seg/weights/best.pt`. Đã phân tích
+      `results.csv`, **tạm chấp nhận model này** để dùng cho demo — xem chẩn đoán chi tiết ở mục 5.
+- [x] Test viewer với model 3D pikachu đã train — chạy ổn, upload `.ply` xem được bình thường.
 - [ ] **Chưa làm**: nối 2D crack detection vào 3D model (xem mục 5 "Việc tiếp theo").
 
 ## 3. Cấu trúc repo
@@ -83,6 +85,26 @@ thư mục `pikachu_gaussian_7000/` (giải nén để test viewer).
 
 **Trạng thái hiện tại:** 2D crack detection (YOLOv8-seg) và 3D reconstruction đang là **2 pipeline độc
 lập, chưa nối nhau**. YOLO không thể và sẽ không bao giờ nhận `.ply` làm input — đây không phải hướng đi.
+
+**Đánh giá model crack detection hiện tại (từ `results.csv`, train xong đủ 150 epoch, không early-stop dù
+`patience=30`):**
+- Không có dấu hiệu overfit (val loss vẫn giảm/ổn định cùng train loss suốt quá trình, không tách ra).
+- Nhưng **mAP mask đã chững (plateau) từ khoảng epoch 85-110** — `mAP50-95(M)` dao động quanh 0.10-0.14 tới
+  hết epoch 150 (kết thúc 0.12), không còn cải thiện rõ rệt dù train thêm. Kết luận: **bị giới hạn bởi
+  lượng/độ đa dạng dữ liệu (256 ảnh train), không phải do thiếu epoch** — train thêm epoch từ giờ không
+  còn đáng.
+- `Precision(M)` = 0.603, `Recall(M)` = 0.364 (epoch cuối) — model thiên về thận trọng, đoán đúng khi báo
+  có nứt nhưng **bỏ sót phần lớn vết nứt thật** (chỉ bắt được ~36%).
+- **Quyết định**: tạm chấp nhận model này để dùng cho demo, không train thêm/cải tiến ngay bây giờ.
+- **Nếu sau này muốn cải thiện** (chưa làm, xếp theo ưu tiên): (1) fine-tune tiếp từ `best.pt` hiện tại
+  trên 1 bộ nhỏ ảnh domain thật (đá/gỗ/gạch di sản, tự chụp + gán nhãn tay ~30-50 ảnh bằng Roboflow/
+  makesense.ai) — đáng giá nhất vì đánh thẳng vào domain gap đã biết và vào việc recall thấp; (2) đổi
+  `yolov8n-seg.pt` → `yolov8s-seg.pt` (rẻ, ít rủi ro, chưa thử); (3) gộp thêm dataset crack công khai khác
+  (Crack500, CFD...) — ưu tiên thấp hơn vì vẫn không giải quyết domain gap.
+- **Resume behavior đã xác nhận**: chạy lại `heritage_twin_crack_detection_colab.ipynb` lần sau sẽ **tự
+  động skip training**, chỉ load `best.pt` có sẵn (logic idempotent trong cell `train01`, giống pattern
+  của pipeline 3D) — miễn `RUN_NAME` vẫn giữ nguyên `"crack_yolov8n_seg"`. Muốn train lại thì bật
+  `FORCE_RETRAIN = True`.
 
 **Cơ chế đúng để nối 2D vào 3D (đã thống nhất, CHƯA code):**
 
