@@ -162,6 +162,21 @@
 				z-index: 999;
 				right: 10px;
 			}
+			#file-input-label {
+				display: inline-block;
+				margin-top: 8px;
+				padding: 6px 12px;
+				background: #0017ff;
+				border: 1px solid #ffffff;
+				border-radius: 6px;
+				font-size: small;
+				font-weight: bold;
+				cursor: pointer;
+				text-shadow: none;
+			}
+			#file-input-label:hover {
+				background: #1f36ff;
+			}
 			#canvas {
 				display: block;
 				position: absolute;
@@ -200,6 +215,9 @@
 				(<a href="https://github.com/antimatter15/splat">MIT license</a>).
 			</small>
 		</p>
+
+			<input type="file" id="file-input" accept=".ply,.splat,.json" style="display:none" />
+			<label for="file-input" id="file-input-label">Chon file model (.ply / .splat)</label>
 
 			<details>
 			<summary>Use mouse or arrow keys to navigate.</summary>

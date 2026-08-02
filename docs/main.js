@@ -1444,6 +1444,16 @@ async function main() {
         selectFile(e.dataTransfer.files[0]);
     });
 
+    const fileInput = document.getElementById("file-input");
+    if (fileInput) {
+        fileInput.addEventListener("change", (e) => {
+            if (e.target.files && e.target.files[0]) {
+                selectFile(e.target.files[0]);
+                e.target.value = "";
+            }
+        });
+    }
+
     let bytesRead = 0;
     let lastVertexCount = -1;
     let stopLoading = false;

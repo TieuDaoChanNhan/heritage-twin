@@ -6,6 +6,10 @@
 *.ply
 *.splat
 
+# Thu muc model da giai nen de test local (vd pikachu_gaussian_7000/), va log TensorBoard di kem
+*_gaussian_*/
+events.out.tfevents*
+
 # Python
 __pycache__/
 *.pyc
