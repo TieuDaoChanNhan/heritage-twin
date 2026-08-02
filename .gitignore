@@ -1,4 +1,4 @@
-# Video / dataset / model output - file nang, khong commit vao git
+# Video / dataset / model output - file nặng, không commit vào git
 *.pdf
 *.mp4
 *.mov
@@ -6,7 +6,7 @@
 *.ply
 *.splat
 
-# Thu muc model da giai nen de test local (vd pikachu_gaussian_7000/), va log TensorBoard di kem
+# Thư mục model đã giải nén để test local (vd pikachu_gaussian_7000/), và log TensorBoard đi kèm
 *_gaussian_*/
 events.out.tfevents*
 

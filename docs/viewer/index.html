@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="vi" dir="ltr">
+	<head>
+		<title>Heritage Twin - 3D Viewer</title>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
+		/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta
+			name="apple-mobile-web-app-status-bar-style"
+			content="black-translucent"
+		/>
+		<style>
+			body {
+				overflow: hidden;
+				margin: 0;
+				height: 100vh;
+				width: 100vw;
+				font-family: sans-serif;
+				background: black;
+    			text-shadow: 0 0 3px black;
+			}
+			a, body {
+				color: white;
+			}
+			#info {
+				z-index: 100;
+				position: absolute;
+				top: 14px;
+				left: 14px;
+				max-width: 320px;
+				background: rgba(10, 10, 20, 0.55);
+				border: 1px solid rgba(255, 255, 255, 0.15);
+				border-radius: 12px;
+				padding: 12px 16px;
+				backdrop-filter: blur(6px);
+			}
+			#back-link {
+				display: inline-block;
+				margin-bottom: 6px;
+				font-size: small;
+				color: #9db4ff;
+				text-decoration: none;
+			}
+			#back-link:hover {
+				text-decoration: underline;
+			}
+			h3 {
+				margin: 5px 0;
+			}
+			p {
+				margin: 5px 0;
+				font-size: small;
+			}
+
+			.cube-wrapper {
+				transform-style: preserve-3d;
+			}
+
+			.cube {
+				transform-style: preserve-3d;
+				transform: rotateX(45deg) rotateZ(45deg);
+				animation: rotation 2s infinite;
+			}
+
+			.cube-faces {
+				transform-style: preserve-3d;
+				height: 80px;
+				width: 80px;
+				position: relative;
+				transform-origin: 0 0;
+				transform: translateX(0) translateY(0) translateZ(-40px);
+			}
+
+			.cube-face {
+				position: absolute;
+				inset: 0;
+				background: #0017ff;
+				border: solid 1px #ffffff;
+			}
+			.cube-face.top {
+				transform: translateZ(80px);
+			}
+			.cube-face.front {
+				transform-origin: 0 50%;
+				transform: rotateY(-90deg);
+			}
+			.cube-face.back {
+				transform-origin: 0 50%;
+				transform: rotateY(-90deg) translateZ(-80px);
+			}
+			.cube-face.right {
+				transform-origin: 50% 0;
+				transform: rotateX(-90deg) translateY(-80px);
+			}
+			.cube-face.left {
+				transform-origin: 50% 0;
+				transform: rotateX(-90deg) translateY(-80px) translateZ(80px);
+			}
+
+			@keyframes rotation {
+				0% {
+					transform: rotateX(45deg) rotateY(0) rotateZ(45deg);
+					animation-timing-function: cubic-bezier(
+						0.17,
+						0.84,
+						0.44,
+						1
+					);
+				}
+				50% {
+					transform: rotateX(45deg) rotateY(0) rotateZ(225deg);
+					animation-timing-function: cubic-bezier(
+						0.76,
+						0.05,
+						0.86,
+						0.06
+					);
+				}
+				100% {
+					transform: rotateX(45deg) rotateY(0) rotateZ(405deg);
+					animation-timing-function: cubic-bezier(
+						0.17,
+						0.84,
+						0.44,
+						1
+					);
+				}
+			}
+
+			.scene,
+			#message {
+				position: absolute;
+				display: flex;
+				top: 0;
+				right: 0;
+				left: 0;
+				bottom: 0;
+				z-index: 2;
+				height: 100%;
+				width: 100%;
+				align-items: center;
+				justify-content: center;
+			}
+			#message {
+				font-weight: bold;
+				font-size: large;
+				color: red;
+				pointer-events: none;
+			}
+
+			details {
+				font-size: small;
+
+			}
+
+			#progress {
+				position: absolute;
+				top: 0;
+				height: 5px;
+				background: blue;
+				z-index: 99;
+				transition: width 0.1s ease-in-out;
+			}
+
+			#quality {
+				position: absolute;
+				bottom: 10px;
+				z-index: 999;
+				right: 10px;
+			}
+
+			#caminfo {
+				position: absolute;
+				top: 10px;
+				z-index: 999;
+				right: 10px;
+			}
+			#file-input-label {
+				display: inline-block;
+				margin-top: 8px;
+				padding: 6px 12px;
+				background: #0017ff;
+				border: 1px solid #ffffff;
+				border-radius: 6px;
+				font-size: small;
+				font-weight: bold;
+				cursor: pointer;
+				text-shadow: none;
+			}
+			#file-input-label:hover {
+				background: #1f36ff;
+			}
+			#canvas {
+				display: block;
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				touch-action: none;
+			}
+
+			#instructions {
+				background: rgba(0,0,0,0.6);
+				white-space: pre-wrap;
+				padding: 10px;
+				border-radius: 10px;
+				font-size: x-small;
+			}
+			body.nohf .nohf {
+				display: none;
+			}
+			body.nohf #progress, body.nohf .cube-face {
+				background: #ff9d0d;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			if(location.host.includes('hf.space')) document.body.classList.add('nohf');
+		</script>
+		<div id="info">
+			<a href="../" id="back-link">&larr; Về trang giới thiệu dự án</a>
+			<h3 class="nohf">Heritage Twin - Xem mô hình 3D</h3>
+			<p>
+			<small class="nohf">
+				Dùng kỹ thuật 3D Gaussian Splatting để dựng lại không gian 3D chân thực từ video.
+				Viewer nền tảng WebGL của
+				<a href="https://twitter.com/antimatter15">Kevin Kwok</a>
+				(<a href="https://github.com/antimatter15/splat">MIT license</a>).
+			</small>
+		</p>
+
+			<input type="file" id="file-input" accept=".ply,.splat,.json" style="display:none" />
+			<label for="file-input" id="file-input-label">Chọn file model (.ply / .splat)</label>
+
+			<details>
+			<summary>Hướng dẫn thao tác (chuột / bàn phím)</summary>
+
+<div id="instructions">Di chuyển (phím mũi tên)
+- Trái/phải: di chuyển ngang sang trái/phải
+- Lên/xuống: di chuyển tới/lui
+- Space: nhảy lên
+
+Xoay góc nhìn (WASD)
+- A/D: quay camera trái/phải
+- W/S: nghiêng camera lên/xuống
+- Q/E: xoay camera nghiêng trái/phải
+- I/K và J/L: xoay quanh vật thể
+
+Trackpad
+- Cuộn lên/xuống/trái/phải để xoay quanh vật thể
+- Chụm 2 ngón tay để tiến/lùi
+- Giữ Ctrl + cuộn để tiến/lùi
+- Giữ Shift + cuộn để di chuyển lên/xuống hoặc sang ngang
+
+Chuột
+- Bấm giữ và kéo để xoay quanh vật thể
+- Chuột phải (hoặc giữ Ctrl/Cmd) kéo lên/xuống để tiến/lùi
+
+Chạm (điện thoại/máy tính bảng)
+- 1 ngón tay: xoay quanh vật thể
+- Chụm 2 ngón tay: tiến/lùi
+- Xoay 2 ngón tay: xoay camera
+- Rê 2 ngón tay: di chuyển ngang/dọc
+
+Khác
+- Phím 0-9: chuyển giữa các góc camera có sẵn
+- Phím '-'/'+' : chuyển lần lượt các góc camera
+- Phím P: tiếp tục animation mặc định
+- Kéo-thả file .ply vào trang để tự động chuyển sang định dạng .splat
+- Kéo-thả file cameras.json để nạp các góc camera có sẵn
+</div>
+
+		</details>
+
+		</div>
+
+		<div id="progress"></div>
+
+		<div id="message"></div>
+		<div class="scene" id="spinner">
+			<div class="cube-wrapper">
+				<div class="cube">
+					<div class="cube-faces">
+						<div class="cube-face bottom"></div>
+						<div class="cube-face top"></div>
+						<div class="cube-face left"></div>
+						<div class="cube-face right"></div>
+						<div class="cube-face back"></div>
+						<div class="cube-face front"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<canvas id="canvas"></canvas>
+
+		<div id="quality">
+			<span id="fps"></span>
+		</div>
+		<div id="caminfo">
+			<span id="camid"></span>
+		</div>
+		<script src="main.js"></script>
+	</body>
+</html>

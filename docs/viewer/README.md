@@ -11,7 +11,8 @@ cd docs
 python -m http.server 8000
 ```
 
-Mở `http://localhost:8000` trên trình duyệt.
+Mở `http://localhost:8000` để xem trang giới thiệu dự án, hoặc `http://localhost:8000/viewer/` để vào
+thẳng trang xem model 3D.
 
 ## Cách nạp model
 
@@ -21,8 +22,8 @@ Có 2 cách:
    `point_cloud/iteration_7000/point_cloud.ply`) vào trang web đang mở. Trình duyệt tự convert sang định
    dạng `.splat` ngay phía client, không cần server xử lý gì thêm.
 2. **Dùng query param `?url=`** trỏ tới 1 file `.splat` host sẵn (phải cho phép CORS), vd:
-   `http://localhost:8000/?url=pikachu.splat`. Cách này phù hợp khi muốn có 1 link cố định để demo/nhúng,
-   không cần thao tác kéo-thả mỗi lần.
+   `http://localhost:8000/viewer/?url=pikachu.splat`. Cách này phù hợp khi muốn có 1 link cố định để
+   demo/nhúng, không cần thao tác kéo-thả mỗi lần.
 
    Có thể convert `.ply` -> `.splat` offline trước bằng `convert.py` đi kèm (không cần internet lúc demo):
    ```bash
@@ -38,6 +39,7 @@ thuộc vào scene demo mạng ngoài.
 
 - Sau khi Colab train xong và tải `point_cloud.ply` về (qua Google Drive theo pipeline trong
   `heritage_twin_pipeline_colab.ipynb`), thử kéo-thả file đó vào viewer này để kiểm tra end-to-end.
-- Đã đặt thư mục này tên `docs/` để bật GitHub Pages trực tiếp: Settings -> Pages -> Branch `main`,
-  folder `/docs` -> Save. Có link demo cố định cho video/ban giám khảo, kèm sẵn 1-2 file `.splat` convert
-  trước bằng `convert.py`.
+- Thư mục cha `docs/` chứa trang giới thiệu dự án (`docs/index.html`), bật GitHub Pages trực tiếp:
+  Settings -> Pages -> Branch `main`, folder `/docs` -> Save. Trang giới thiệu có nút dẫn sang
+  `docs/viewer/` (thư mục này) để xem model 3D. Nên có sẵn 1-2 file `.splat` convert trước bằng
+  `convert.py` để demo không phụ thuộc mạng.
