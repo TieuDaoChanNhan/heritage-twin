@@ -29,9 +29,12 @@ nghiêng/rêu mốc/đa thời điểm vì phức tạp, không cần thiết ch
 - [x] Test viewer với model 3D pikachu đã train — chạy ổn, upload `.ply` xem được bình thường.
 - [x] Demo phát hiện vết nứt chạy ngay trên trình duyệt (`docs/crack/`), dùng `onnxruntime-web` (WASM,
       vendor local, không CDN) — không cần server/GPU. Landing page đã có nút dẫn sang.
-      **Cần làm nốt**: chạy cell "Export sang ONNX" (mới thêm) trong
-      `heritage_twin_crack_detection_colab.ipynb`, đặt `best.onnx` vào `docs/crack/model/best.onnx` rồi
-      commit — hiện file này CHƯA có trong repo nên trang chưa chạy được thật, mới xong phần code.
+      `docs/crack/model/best.onnx` đã có trong repo. **Đã kiểm chứng end-to-end** trước khi commit: đọc
+      trực tiếp shape input/output thật của model (khớp 100% giả định trong `main.js`, không cần fallback),
+      và chạy thử bản Python replicate y hệt logic decode trên 2 ảnh test thật từ DeepCrack — mask bám đúng
+      hình dạng vết nứt cả 2 ảnh. Về lý thuyết trang đã sẵn sàng chạy thật trên GitHub Pages, nhưng **chưa
+      tự tay bấm thử trên trình duyệt thật** (chỉ test logic qua Python) — nên test lại 1 lần trên web thật
+      trước khi tin tưởng 100% cho video demo.
 - [ ] **Chưa làm**: nối 2D crack detection vào 3D model (xem mục 5 "Việc tiếp theo").
 
 ## 3. Cấu trúc repo
