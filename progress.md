@@ -27,6 +27,11 @@ nghiêng/rêu mốc/đa thời điểm vì phức tạp, không cần thiết ch
       `MyDrive/HeritageTwin/crack_detection/runs/crack_yolov8n_seg/weights/best.pt`. Đã phân tích
       `results.csv`, **tạm chấp nhận model này** để dùng cho demo — xem chẩn đoán chi tiết ở mục 5.
 - [x] Test viewer với model 3D pikachu đã train — chạy ổn, upload `.ply` xem được bình thường.
+- [x] Demo phát hiện vết nứt chạy ngay trên trình duyệt (`docs/crack/`), dùng `onnxruntime-web` (WASM,
+      vendor local, không CDN) — không cần server/GPU. Landing page đã có nút dẫn sang.
+      **Cần làm nốt**: chạy cell "Export sang ONNX" (mới thêm) trong
+      `heritage_twin_crack_detection_colab.ipynb`, đặt `best.onnx` vào `docs/crack/model/best.onnx` rồi
+      commit — hiện file này CHƯA có trong repo nên trang chưa chạy được thật, mới xong phần code.
 - [ ] **Chưa làm**: nối 2D crack detection vào 3D model (xem mục 5 "Việc tiếp theo").
 
 ## 3. Cấu trúc repo
@@ -43,6 +48,11 @@ docs/                      Website tự host (GitHub Pages, branch main, folder 
     index.html, main.js    WebGL thuần, không CDN, có nút "Chọn file model" + kéo-thả
     convert.py             Convert .ply -> .splat offline (tuỳ chọn)
     README.md              Hướng dẫn dùng viewer
+  crack/                   Demo phát hiện vết nứt, chạy model ngay trên trình duyệt (không backend/GPU)
+    index.html, main.js    Letterbox preprocess + inference + NMS/giải mã mask thủ công (ONNX không có NMS sẵn)
+    ort/                   Vendor từ onnxruntime-web (MIT), chỉ backend WASM, single-thread
+    model/best.onnx        CHƯA commit - cần export từ notebook crack rồi đặt vào đây (xem docs/crack/README.md)
+    README.md              Hướng dẫn lấy model + chạy thử
 
 progress.md                File này
 README.md                  Tổng quan repo
@@ -80,6 +90,15 @@ thư mục `pikachu_gaussian_7000/` (giải nén để test viewer).
   có chủ đích của thư viện (convert `.ply` nặng thành `.splat` nhẹ để dùng lại lần sau), không phải lỗi.
   Có thể tắt (đổi `save: true` thành `false` trong `selectFile()` ở `main.js`) nếu thấy gây khó chịu lúc
   demo — **chưa tắt, đang giữ nguyên mặc định**.
+- **Demo crack chạy client-side qua ONNX Runtime Web, không backend/GPU** — model `.pt` export sang
+  `.onnx` (cell mới trong notebook crack), chạy bằng `onnxruntime-web` backend WASM vendor local. **Ép
+  `numThreads = 1`** vì multi-thread WASM cần header `Cross-Origin-Opener-Policy`/`Cross-Origin-Embedder-
+  Policy` mà GitHub Pages không cho cấu hình — quên set cái này sẽ khiến model load lỗi/im lặng chạy sai
+  trên GitHub Pages dù chạy tốt lúc test local. ONNX export không kèm NMS sẵn nên `main.js` tự làm NMS +
+  giải mã mask (nhân ma trận mask coefficient với proto rồi sigmoid) — code này **chưa test end-to-end với
+  file `.onnx` thật** (chỉ mới test được việc serve file tĩnh), có thể cần debug thêm khi chạy thật lần
+  đầu; đã cài sẵn kiểm tra định dạng output (chọn tensor theo số chiều thay vì theo index cố định, validate
+  số kênh) để báo lỗi rõ ràng thay vì âm thầm sai nếu giả định format không khớp.
 
 ## 5. Việc tiếp theo — tích hợp crack detection vào mô hình 3D
 
