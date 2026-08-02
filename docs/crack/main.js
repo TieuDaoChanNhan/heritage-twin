@@ -22,7 +22,11 @@ function setStatus(text, isError) {
 async function loadModel() {
 	// Chi dung WASM backend, ep numThreads=1: GitHub Pages khong gui header COOP/COEP nen
 	// SharedArrayBuffer (can cho multi-thread) khong dung duoc - single thread luon chay on dinh.
-	ort.env.wasm.wasmPaths = "ort/";
+	// wasmPaths phai la URL tuyet doi hoac bat dau bang "./" - fetch() chap nhan path tuong doi khong
+	// "./" nhung dynamic import() (dung de nap file .mjs) thi khong, coi no la "bare specifier" va loi
+	// "Failed to resolve module specifier". Dung URL cua chinh file main.js (khong dung location.href,
+	// vi thieu dau "/" cuoi URL trang se lam resolve sai thu muc cha thay vi thu muc con "ort/").
+	ort.env.wasm.wasmPaths = new URL("ort/", document.currentScript.src).href;
 	ort.env.wasm.numThreads = 1;
 
 	fileLabel.classList.add("disabled");
